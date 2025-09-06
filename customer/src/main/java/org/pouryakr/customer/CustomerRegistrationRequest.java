@@ -1,4 +1,4 @@
-package org.customer;
+package org.pouryakr.customer;
 
 
 public record CustomerRegistrationRequest(

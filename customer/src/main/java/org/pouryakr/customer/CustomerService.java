@@ -1,10 +1,13 @@
-package org.customer;
+package org.pouryakr.customer;
 
+import org.pouryakr.clients.FraudCheckResponse;
+import org.pouryakr.clients.FraudClient;
 import org.springframework.stereotype.Service;
 
 @Service
 public record CustomerService(
-        CustomerRepository repository
+        CustomerRepository repository,
+        FraudClient fraudClient
 ) {
 
     public void registerCustomer(CustomerRegistrationRequest customerRequest) {
@@ -16,6 +19,10 @@ public record CustomerService(
 
         repository.saveAndFlush(customer);
 
-        // todo : check if fraudster
+        FraudCheckResponse fraudster = fraudClient.isFraudster(customer.getId());
+
+        if (fraudster.isFraudster()) {
+            throw new IllegalStateException("fraudster");
+        }
     }
 }

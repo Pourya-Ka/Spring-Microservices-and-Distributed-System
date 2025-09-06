@@ -1,4 +1,4 @@
-package org.eurekaserver;
+package org.pouryakr.eurekaserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

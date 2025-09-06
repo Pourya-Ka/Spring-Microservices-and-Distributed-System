@@ -1,4 +1,4 @@
-package org.fraud;
+package org.pouryakr.fraud;
 
 import org.springframework.stereotype.Service;
 

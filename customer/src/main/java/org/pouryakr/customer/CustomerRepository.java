@@ -1,4 +1,4 @@
-package org.customer;
+package org.pouryakr.customer;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
