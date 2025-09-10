@@ -1,13 +1,16 @@
 server:
-  port: 8080
+  port: 8082
+
 spring:
   application:
-    name: customer
+    name: notification
+  profiles:
+    active: default
 
   datasource:
     password: password
-    url: jdbc:postgresql://localhost:5432/customer
-    username: postgres
+    url: jdbc:postgresql://localhost:5434/notification
+    username: hrk
 
   jpa:
     hibernate:
@@ -18,11 +21,13 @@ spring:
         format_sql: true
     show-sql: true
 
+  zipkin:
+    base-url: http://localhost:9411
+
+  rabbitmq:
+    addresses: localhost:5672
+
 eureka:
-  instance:
-    prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ip-address}:${server.port}
-    hostname: ${spring.cloud.client.hostname}
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
@@ -30,5 +35,10 @@ eureka:
     register-with-eureka: true
     enabled: true
 
-  zipkin:
-    base-url: http://localhost:9411
+rabbitmq:
+  exchanges:
+    internal: internal.exchange
+  queue:
+    notification: notification.queue
+  routing-keys:
+    internal-notification: internal.notification.routing-key

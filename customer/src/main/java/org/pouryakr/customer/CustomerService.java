@@ -1,13 +1,16 @@
 package org.pouryakr.customer;
 
+import org.pouryakr.amqp.RabbitMQMessageProducer;
 import org.pouryakr.clients.FraudCheckResponse;
 import org.pouryakr.clients.FraudClient;
+import org.pouryakr.notification.NotificationRequest;
 import org.springframework.stereotype.Service;
 
 @Service
 public record CustomerService(
         CustomerRepository repository,
-        FraudClient fraudClient
+        FraudClient fraudClient,
+        RabbitMQMessageProducer rabbitMQMessageProducer
 ) {
 
     public void registerCustomer(CustomerRegistrationRequest customerRequest) {
@@ -24,5 +27,13 @@ public record CustomerService(
         if (fraudster.isFraudster()) {
             throw new IllegalStateException("fraudster");
         }
+
+        NotificationRequest notificationRequest = new NotificationRequest(
+                customer.getId(),
+                customer.getEmail(),
+                String.format("Hi %s welcome to HRK Academy...", customer.getFirstName())
+        );
+        rabbitMQMessageProducer.publish(notificationRequest, "internal.exchange", "internal.notification.routing-key");
+
     }
 }
